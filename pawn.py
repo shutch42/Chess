@@ -28,13 +28,17 @@ class Pawn:
         return attacks
     
     def move(self, row, column):
+        moves = []
         if(self.color == BLACK):
-            if(turns == 0):
-                return [[row + 1, column], [row + 2, column]]
-            else:
-                return[[row + 1, column]]
+            newRow1 = row + 1
+            newRow2 = row + 2
         else:
-            if(turns == 0):
-                return [[row - 1, column], [row - 2, column]]
-            else:
-                return[[row - 1, column]]
+            newRow1 = row - 1
+            newRow2 = row - 2
+
+        if(turns == 0):
+            moves.append([newRow2, column])
+        if(newRow1 >= 0 and newRow1 <= 7):
+            moves.append([newRow1, column])
+        
+        return moves
