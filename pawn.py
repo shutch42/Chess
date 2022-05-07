@@ -9,10 +9,23 @@ class Pawn:
             self.image = 'img/pawn_w.png'
     
     def attack(self, row, column):
+        attacks = []
+
         if(self.color == BLACK):
-            return [[row + 1, column + 1], [row + 1, column - 1]]
+            newRow = row + 1
         else:
-            return [[row - 1, column + 1], [row - 1, column - 1]]
+            newRow = row - 1
+
+        newCol1 = column + 1
+        newCol2 = column - 1
+
+        if(newRow <= 7 and newRow >= 0):
+            if(newCol1 <= 7):
+                attacks.append([newRow, newCol1])
+            if(newCol2 >= 0):
+                attacks.append([newRow, newCol2])
+
+        return attacks
     
     def move(self, row, column):
         if(self.color == BLACK):
