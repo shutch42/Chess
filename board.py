@@ -58,6 +58,19 @@ class Board:
                 button.clicked.connect(partial(self.selectPiece, i, j))
                 self.grid.addWidget(button, i, j)
 
+    def resetTileColors(self):
+        for i in range(8):
+            for j in range(8):
+                first = "white"
+                second = "grey"
+                if(i%2 == 1):
+                    first = "grey"
+                    second = "white"
+                if(j % 2 == 0):
+                    self.grid.itemAtPosition(i, j).widget().setStyleSheet("background-color: "+first)
+                else:
+                    self.grid.itemAtPosition(i, j).widget().setStyleSheet("background-color: "+second)
+
     def display(self):
         self.win.setLayout(self.grid)
         self.win.setWindowTitle("Chess")
@@ -66,12 +79,14 @@ class Board:
         sys.exit(self.app.exec())
 
     def selectPiece(self, i, j):
+        self.resetTileColors()
         if(self.position[i][j]):
             print("You chose ", i, j)
             print("Possible attacks: ")
             attacks = self.position[i][j].attack(i,j)
             for attack in attacks:
-                self.grid.itemAtPosition(attack[0], attack[1]).widget().setStyleSheet("background-color: red")
+                if(self.position[attack[0]][attack[1]]):
+                    self.grid.itemAtPosition(attack[0], attack[1]).widget().setStyleSheet("background-color: red")
             moves = self.position[i][j].move(i, j)
             for move in moves:
                 self.grid.itemAtPosition(move[0], move[1]).widget().setStyleSheet("background-color: green")
