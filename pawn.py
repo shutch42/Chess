@@ -20,10 +20,12 @@ class Pawn:
         newCol2 = column - 1
 
         if(newRow <= 7 and newRow >= 0):
-            if(newCol1 <= 7):
-                attacks.append([newRow, newCol1])
-            if(newCol2 >= 0):
-                attacks.append([newRow, newCol2])
+            if(newCol1 <= 7 and board[newRow][newCol1]):
+                if(board[newRow][newCol1].color != self.color):
+                    attacks.append([newRow, newCol1])
+            if(newCol2 >= 0 and board[newRow][newCol2]):
+                if(board[newRow][newCol2].color != self.color):
+                    attacks.append([newRow, newCol2])
 
         return attacks
     
