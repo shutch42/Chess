@@ -8,5 +8,5 @@ This is a fully-working chess game, implemented in python with the Qt library fo
 - Basic moves for each piece
 ### Features I'm working on:
 - Checkmate Detection
-- Special Case Rules
+- Special Cases
 - AI Opponent
