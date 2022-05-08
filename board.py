@@ -41,7 +41,6 @@ class Board:
                 self.grid.addWidget(button, i, j)
 
     def resetTiles(self):
-        grid = QGridLayout()
         for i in range(8):
             for j in range(8):
                 button = QPushButton()
@@ -62,7 +61,7 @@ class Board:
                 self.grid.removeWidget(self.grid.itemAtPosition(i, j).widget())
                 self.grid.addWidget(button, i, j)
                 
-    def showPossibleMoves(self, moves, attacks):
+    def showPossibleMoves(self, piece, moves, attacks):
         for i in range(8):
             for j in range(8):
                 button = QPushButton()
@@ -83,12 +82,12 @@ class Board:
                 for move in moves:
                     if(move[0] == i and move[1] == j):
                         button.setStyleSheet("background-color: green")
-                        button.clicked.connect(self.move)
+                        button.clicked.connect(partial(self.move, piece[0], piece[1], move[0], move[1]))
                         break
                 for attack in attacks:
                     if(attack[0] == i and attack[1] == j and self.position[attack[0]][attack[1]]):
                         button.setStyleSheet("background-color: red")
-                        button.clicked.connect(self.move)
+                        button.clicked.connect(partial(self.move, piece[0], piece[1], attack[0], attack[1]))
                         break
                 self.grid.removeWidget(self.grid.itemAtPosition(i, j).widget())
                 self.grid.addWidget(button, i, j)
@@ -106,10 +105,15 @@ class Board:
             print("You chose ", i, j)
             attacks = self.position[i][j].attack(i,j)
             moves = self.position[i][j].move(i,j)
-            self.showPossibleMoves(moves, attacks)
+            self.showPossibleMoves([i,j], moves, attacks)
             # for move in moves:
             #     self.grid.itemAtPosition(move[0], move[1]).widget().setStyleSheet("background-color: green")
 
     
-    def move(self):
+    def move(self, currRow, currCol, nextRow, nextCol):
+        print(currRow, currCol)
+        print(nextRow, nextCol)
+        self.position[nextRow][nextCol] = self.position[currRow][currCol]
+        self.position[currRow][currCol] = False
+        self.resetTiles()
         print("Moving piece")
