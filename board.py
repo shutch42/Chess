@@ -4,6 +4,7 @@ from rook import *
 from knight import *
 from bishop import *
 from queen import *
+from king import *
 from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize, Slot
@@ -15,14 +16,14 @@ class Board:
     grid = QGridLayout()
     turn = WHITE
 
-    position = [[Rook(BLACK), Knight(BLACK), Bishop(BLACK), Queen(BLACK), False, Bishop(BLACK), Knight(BLACK), Rook(BLACK)],
+    position = [[Rook(BLACK), Knight(BLACK), Bishop(BLACK), Queen(BLACK), King(BLACK), Bishop(BLACK), Knight(BLACK), Rook(BLACK)],
                 [Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)],
                 [False, False, False, False, False, False, False, False],
                 [False, False, False, False, False, False, False, False],
                 [False, False, False, False, False, False, False, False],
                 [False, False, False, False, False, False, False, False],
                 [Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE)],
-                [Rook(WHITE), Knight(WHITE), Bishop(WHITE), Queen(WHITE), False, Bishop(WHITE), Knight(WHITE), Rook(WHITE)]]
+                [Rook(WHITE), Knight(WHITE), Bishop(WHITE), Queen(WHITE), King(WHITE), Bishop(WHITE), Knight(WHITE), Rook(WHITE)]]
 
     def __init__(self):
         for i in range(8):
