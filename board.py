@@ -5,6 +5,7 @@ from knight import *
 from bishop import *
 from queen import *
 from king import *
+from opponent import *
 from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize, Slot
@@ -15,6 +16,7 @@ class Board:
     win = QWidget()
     grid = QGridLayout()
     turn = WHITE
+    opponent = RandomOpponent()
 
     position = [[Rook(BLACK), Knight(BLACK), Bishop(BLACK), Queen(BLACK), King(BLACK), Bishop(BLACK), Knight(BLACK), Rook(BLACK)],
                 [Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)],
@@ -106,7 +108,11 @@ class Board:
     def selectPiece(self, i, j):
         self.resetTiles()
         if(self.position[i][j]):
-            if(self.position[i][j].color == self.turn):
+            #Use for 2 Player
+            #if(self.position[i][j].color == self.turn):
+
+            #Use for AI
+            if(self.position[i][j].color == WHITE):
                 print("You chose ", i, j)
                 attacks = self.position[i][j].attack(i,j,self.position)
                 moves = self.position[i][j].move(i,j,self.position)
@@ -118,6 +124,14 @@ class Board:
         self.position[nextRow][nextCol] = self.position[currRow][currCol]
         self.position[currRow][currCol] = False
         self.position[nextRow][nextCol].turns += 1
-        self.turn = not self.turn
+        self.turn = BLACK
         self.resetTiles()
-        print("Moving piece")
+        print("Moved White")
+        print("Deciding Black")
+        currRow, currCol, nextRow, nextCol = self.opponent.pickMove(self.position)
+        self.position[nextRow][nextCol] = self.position[currRow][currCol]
+        self.position[currRow][currCol] = False
+        self.position[nextRow][nextCol].turns += 1
+        self.resetTiles()
+        print("Moved black")
+        self.turn = WHITE
