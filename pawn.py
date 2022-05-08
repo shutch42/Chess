@@ -3,6 +3,7 @@ class Pawn:
     def __init__(self, color):
         self.state = ALIVE
         self.color = color
+        self.turns = 0
         if(color == BLACK):
             self.image = 'img/pawn_b.png'
         else:
@@ -36,7 +37,7 @@ class Pawn:
             newRow1 = row - 1
             newRow2 = row - 2
 
-        if(turns == 0):
+        if(self.turns == 0):
             moves.append([newRow2, column])
         if(newRow1 >= 0 and newRow1 <= 7):
             moves.append([newRow1, column])

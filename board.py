@@ -9,6 +9,7 @@ class Board:
     app = QApplication(sys.argv)
     win = QWidget()
     grid = QGridLayout()
+    turn = WHITE
 
     position = [[False, False, False, False, False, False, False, False, False],
             [Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)],
@@ -80,10 +81,9 @@ class Board:
                     button.setIcon(QIcon(self.position[i][j].image))
                 button.clicked.connect(partial(self.selectPiece, i, j))
                 for move in moves:
-                    if(move[0] == i and move[1] == j):
+                    if(move[0] == i and move[1] == j and not self.position[i][j]):
                         button.setStyleSheet("background-color: green")
                         button.clicked.connect(partial(self.move, piece[0], piece[1], move[0], move[1]))
-                        break
                 for attack in attacks:
                     if(attack[0] == i and attack[1] == j and self.position[attack[0]][attack[1]]):
                         button.setStyleSheet("background-color: red")
@@ -102,12 +102,11 @@ class Board:
     def selectPiece(self, i, j):
         self.resetTiles()
         if(self.position[i][j]):
-            print("You chose ", i, j)
-            attacks = self.position[i][j].attack(i,j)
-            moves = self.position[i][j].move(i,j)
-            self.showPossibleMoves([i,j], moves, attacks)
-            # for move in moves:
-            #     self.grid.itemAtPosition(move[0], move[1]).widget().setStyleSheet("background-color: green")
+            if(self.position[i][j].color == self.turn):
+                print("You chose ", i, j)
+                attacks = self.position[i][j].attack(i,j)
+                moves = self.position[i][j].move(i,j)
+                self.showPossibleMoves([i,j], moves, attacks)
 
     
     def move(self, currRow, currCol, nextRow, nextCol):
@@ -115,5 +114,7 @@ class Board:
         print(nextRow, nextCol)
         self.position[nextRow][nextCol] = self.position[currRow][currCol]
         self.position[currRow][currCol] = False
+        self.position[nextRow][nextCol].turns += 1
+        self.turn = not self.turn
         self.resetTiles()
         print("Moving piece")
