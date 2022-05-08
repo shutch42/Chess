@@ -62,7 +62,7 @@ class Board:
                 self.grid.removeWidget(self.grid.itemAtPosition(i, j).widget())
                 self.grid.addWidget(button, i, j)
                 
-    def showPossibleMoves(self, moves):
+    def showPossibleMoves(self, moves, attacks):
         for i in range(8):
             for j in range(8):
                 button = QPushButton()
@@ -85,6 +85,11 @@ class Board:
                         button.setStyleSheet("background-color: green")
                         button.clicked.connect(self.move)
                         break
+                for attack in attacks:
+                    if(attack[0] == i and attack[1] == j and self.position[attack[0]][attack[1]]):
+                        button.setStyleSheet("background-color: red")
+                        button.clicked.connect(self.move)
+                        break
                 self.grid.removeWidget(self.grid.itemAtPosition(i, j).widget())
                 self.grid.addWidget(button, i, j)
 
@@ -99,16 +104,9 @@ class Board:
         self.resetTiles()
         if(self.position[i][j]):
             print("You chose ", i, j)
-            print("Possible attacks: ")
-            # attacks = self.position[i][j].attack(i,j)
-            # print(attacks)
-            # for attack in attacks:
-            #     #if(self.position[attack[0]][attack[1]]):
-            #     self.grid.itemAtPosition(attack[0], attack[1]).widget().setStyleSheet("background-color: red")
-            moves = self.position[i][j].move(i, j)
-            print("Possible moves: ")
-            print(moves)
-            self.showPossibleMoves(moves)
+            attacks = self.position[i][j].attack(i,j)
+            moves = self.position[i][j].move(i,j)
+            self.showPossibleMoves(moves, attacks)
             # for move in moves:
             #     self.grid.itemAtPosition(move[0], move[1]).widget().setStyleSheet("background-color: green")
 
