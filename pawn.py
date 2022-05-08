@@ -1,7 +1,6 @@
 from constants import *
 class Pawn:
     def __init__(self, color):
-        self.state = ALIVE
         self.color = color
         self.turns = 0
         if(color == BLACK):

@@ -108,7 +108,6 @@ class Board:
                 moves = self.position[i][j].move(i,j)
                 self.showPossibleMoves([i,j], moves, attacks)
 
-    
     def move(self, currRow, currCol, nextRow, nextCol):
         print(currRow, currCol)
         print(nextRow, nextCol)
