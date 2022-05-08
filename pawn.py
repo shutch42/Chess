@@ -36,9 +36,9 @@ class Pawn:
             newRow1 = row - 1
             newRow2 = row - 2
 
-        if(self.turns == 0):
-            moves.append([newRow2, column])
-        if(newRow1 >= 0 and newRow1 <= 7):
+        if(not board[newRow1][column] and newRow1 >= 0 and newRow1 <= 7):
             moves.append([newRow1, column])
+            if(self.turns == 0 and not board[newRow2][column]):
+                moves.append([newRow2, column])
         
         return moves
