@@ -8,7 +8,7 @@ class Pawn:
         else:
             self.image = 'img/pawn_w.png'
     
-    def attack(self, row, column):
+    def attack(self, row, column, board):
         attacks = []
 
         if(self.color == BLACK):
@@ -27,7 +27,7 @@ class Pawn:
 
         return attacks
     
-    def move(self, row, column):
+    def move(self, row, column, board):
         moves = []
         if(self.color == BLACK):
             newRow1 = row + 1

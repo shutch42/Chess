@@ -1,5 +1,6 @@
 import sys
 from pawn import *
+from rook import *
 from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize, Slot
@@ -11,15 +12,14 @@ class Board:
     grid = QGridLayout()
     turn = WHITE
 
-    position = [[False, False, False, False, False, False, False, False, False],
-            [Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)],
-            [False, False, False, False, False, False, False, False, False],
-            [False, False, False, False, False, False, False, False, False],
-            [False, False, False, False, False, False, False, False, False],
-            [False, False, False, False, False, False, False, False, False],
-            [Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE)],
-            [False, False, False, False, False, False, False, False, False]
-            ]
+    position = [[Rook(BLACK), False, False, False, False, False, False, Rook(BLACK)],
+                [Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)],
+                [False, False, False, False, False, False, False, False],
+                [False, False, False, False, False, False, False, False],
+                [False, False, False, False, False, False, False, False],
+                [False, False, False, False, False, False, False, False],
+                [Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE)],
+                [Rook(WHITE), False, False, False, False, False, False, Rook(WHITE)]]
 
     def __init__(self):
         for i in range(8):
@@ -104,8 +104,8 @@ class Board:
         if(self.position[i][j]):
             if(self.position[i][j].color == self.turn):
                 print("You chose ", i, j)
-                attacks = self.position[i][j].attack(i,j)
-                moves = self.position[i][j].move(i,j)
+                attacks = self.position[i][j].attack(i,j,self.position)
+                moves = self.position[i][j].move(i,j,self.position)
                 self.showPossibleMoves([i,j], moves, attacks)
 
     def move(self, currRow, currCol, nextRow, nextCol):
