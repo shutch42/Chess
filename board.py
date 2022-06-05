@@ -16,7 +16,7 @@ class Board:
     win = QWidget()
     grid = QGridLayout()
     turn = WHITE
-    opponent = RandomOpponent()
+    opponent = GreedyOpponent()
 
     position = [[Rook(BLACK), Knight(BLACK), Bishop(BLACK), Queen(BLACK), King(BLACK), Bishop(BLACK), Knight(BLACK), Rook(BLACK)],
                 [Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)],

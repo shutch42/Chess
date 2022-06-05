@@ -1,3 +1,4 @@
+from csv import QUOTE_NONE
 from constants import *
 import random
 import copy
@@ -30,23 +31,65 @@ class RandomOpponent(Opponent):
         nextCol = choice[1]
         return row, col, nextRow, nextCol
 
+class GreedyOpponent(Opponent):
+    def pickMove(self, board):
+        score = 0
+        row = -1
+        col = -1
+        nextRow = -1
+        nextCol = -1
+        pieces = self.findMoveablePieces(BLACK, board)
+        for piece in pieces:
+            p = piece[0]
+            t_row = piece[1]
+            t_col = piece[2]
+            attacks = p.attack(t_row, t_col, board)
+            for attack in attacks:
+                t_nextRow = attack[0]
+                t_nextCol = attack[1]
+                piece = type(board[t_nextRow][t_nextCol])
+                if piece is Bishop:
+                    turnScore = BISHOP
+                if piece is King:
+                    turnScore = KING
+                if piece is Knight:
+                    turnScore = KNIGHT
+                if piece is Pawn:
+                    turnScore = PAWN
+                if piece is Queen:
+                    turnScore = QUEEN
+                if piece is Rook:
+                    turnScore = ROOK
+                if turnScore > score:
+                    print("Found move")
+                    print(turnScore)
+                    score = turnScore
+                    row = t_row
+                    col = t_col
+                    nextRow = t_nextRow
+                    nextCol = t_nextCol
+        if score == 0:
+            random = RandomOpponent()
+            return random.pickMove(board)
+        else:
+            return row, col, nextRow, nextCol
+
 class Node:
     children = []
     board = []
     score = 0
+    startRow = 0
+    startCol = 0
+    moveToRow = 0
+    moveToCol = 0
 
 class MinimaxOpponent(Opponent):
     def pickMove(self, board):
         curr = Node()
         curr.board = board
         self.buildTree(curr, BLACK)
-        return min(curr.children, key = lambda x:x.score)
-        # scores = []
-        # for child in curr.children:
-        #     child.buildTree(WHITE,curr.board)
-        #     for node in child.children:
-        #         scores.append(node.score)
-        # return max(scores)
+        bestMove = min(curr.children, key = lambda x:x.score)
+        return bestMove.startRow, bestMove.startCol, bestMove.moveToRow, bestMove.moveToCol
 
 
     def buildTree(self, head, color):
@@ -93,6 +136,10 @@ class MinimaxOpponent(Opponent):
         nextBoard = copy.deepcopy(board)
         nextBoard[nextRow][nextCol] = nextBoard[currRow][currCol]
         child.board = nextBoard
+        child.startRow = currRow
+        child.startCol = currCol
+        child.moveToRow = nextRow
+        child.moveToCol = nextCol
         return child
 
 #test
@@ -104,11 +151,11 @@ from queen import *
 from king import *
 position = [[Rook(BLACK), Knight(BLACK), Bishop(BLACK), Queen(BLACK), King(BLACK), Bishop(BLACK), Knight(BLACK), Rook(BLACK)],
                 [Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK), Pawn(BLACK)],
-                [False, False, False, False, False, False, False, False],
+                [False, False, Pawn(WHITE), False, False, False, False, False],
                 [False, False, False, False, False, False, False, False],
                 [False, False, False, False, False, False, False, False],
                 [False, False, False, False, False, False, False, False],
                 [Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE), Pawn(WHITE)],
                 [Rook(WHITE), Knight(WHITE), Bishop(WHITE), Queen(WHITE), King(WHITE), Bishop(WHITE), Knight(WHITE), Rook(WHITE)]]
-opponent = MinimaxOpponent()
-opponent.pickMove(position)
+opponent = GreedyOpponent()
+print(opponent.pickMove(position))
